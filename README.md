@@ -10,19 +10,19 @@ Secondly, summarize the default rate and improve the former step to avoid defaul
 ## Objective
 In this analysis, we analyze data from Lending club (LC):
 
-\textbf{Stage1: Initial EDA (Data: 2015-2017)}
+Stage1: Initial EDA (Data: 2015-2017)
 
 Analyze how borrower's status inluenced their loan amount? (Linear regression)
 
-\textbf{Stage2: Before loan was funded (Data: 2015-2017)}
+Stage2: Before loan was funded (Data: 2015-2017)
 
 Analyze how LC assigned loan grade: How borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regreesion)
 
-\textbf{Stage3: After laon ended (Data: 2007-2011)}
+Stage3: After laon ended (Data: 2007-2011)
 
 Summarize default rate for each state.(Multilevel logistic regression)
 
-\textbf{Stage4: Summarize and Discussion}
+Stage4: Summarize and Discussion
 
 Assessment of	the	result. Discuss about the data limitations and future	directions.
 

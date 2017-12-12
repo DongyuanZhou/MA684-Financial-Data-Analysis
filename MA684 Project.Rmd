@@ -22,10 +22,9 @@ library(MASS)
 library(lme4)
 library(devtools)
 library(wordcloud2)
-library(rstan)
 library(openintro)
 library(knitr)
-pacman::p_load("arm","rstanarm","data.table","car")
+pacman::p_load("arm","rstanarm","data.table","car","merTools")
 ```
 
 ## Background
@@ -36,6 +35,7 @@ Firstly, grades the loan according to the borrower credit record as well as the 
 Secondly, summarize the default rate and improve the former step to avoid default next time.
 
 ## Objective
+
 In this analysis, we analyze data from Lending club (LC):
 
 \textbf{Stage1: Initial EDA (Data: 2015-2017)}
@@ -55,7 +55,8 @@ Summarize default rate for each state.(Multilevel logistic regression)
 Assessment of	the	result. Discuss about the data limitations and future	directions.
 
 ## Data description
-Data source: [_https://www.lendingclub.com/info/download-data.action_](https://www.lendingclub.com/info/download-data.action)
+
+Data source: [https://www.lendingclub.com/info/download-data.action](https://www.lendingclub.com/info/download-data.action)
 
 To get reasonable analysis, we only choose the data which had been verified by LC.
 
@@ -72,9 +73,7 @@ gradenumber & 7 & 6 & 5 & 4 & 3 & 2 & 1 \\
 \end{tabular}
 \end{table}
 
-Code for data cleaning: "data clean.R"
-
-```{r}
+```{r, echo=FALSE}
 ## Final Data
 Loan1517 <- read.table("Loan1517.csv", header = TRUE, sep = ",")
 Loan0711 <- read.table("Loan0711.csv", header = TRUE, sep = ",")
@@ -87,50 +86,78 @@ Loan0711$dti <- Loan0711$dti/100
 Loan1517$dti <- Loan1517$dti/100
 ```
 
+## Analysis Part
+
 ### 1. Initial EDA
 
 Analyze how borrower's status inluenced their loan amount? (Linear regression)
 
+#### Initial EDA
 
-```{r, warning=FALSE, fig.width=10}
+1. How home ownership influenced loan amount?
+
+2. How employment years inluenced loan amount?
+
+3. How loan purpose influenced loan amount?
+
+4. How state status influenced loan amount?
+
+5. How monthly income influenced loan amount?
+
+```{r, echo=FALSE, warning=FALSE}
 # 1. How home ownership influenced loan amount?
 home <- summarise(group_by(Loan1517,Loan1517$home_ownership),
                   loan_amnt = mean(loan_amnt, na.rm = TRUE))
 home$home_ownership <- home$`Loan1517$home_ownership`
 p1 <- ggplot(home)+
   aes(x=reorder(home$home_ownership,loan_amnt),y = log(loan_amnt),
-      color=reorder(home$home_ownership,loan_amnt))+
-  geom_point(size=3)+
-  xlab("home_ownership")+
-  labs(title = "homeownership")+
-  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
-  coord_flip()
+      fill=reorder(home$home_ownership,loan_amnt))+
+  geom_bar(stat = "identity",width = 0.5)+
+  geom_text(aes(label = round(loan_amnt)),size = 3,vjust = -1)+
+  xlab("Home ownership")+
+  ylab("Loan amount")+
+  labs(title = "Home ownership")+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 
 # 2. How employment years inluenced loan amount?
 emp_year <- summarise(group_by(Loan1517,Loan1517$emp_year),
                       loan_amnt = mean(loan_amnt, na.rm = TRUE))
 emp_year$emp_years <- emp_year$`Loan1517$emp_year`
 p2 <- ggplot(emp_year)+
-  aes(factor(emp_years), y =  log(loan_amnt),color = factor(emp_years))+
-  geom_point(size=3)+
-  xlab("employment_year")+
-  labs(title = "employment year")+
-  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
-  coord_flip()
+  aes(factor(emp_years), y =  log(loan_amnt),fill = factor(emp_years))+
+  geom_bar(stat = "identity",width = 0.5)+
+  xlab("Employment year")+
+  ylab("Loan amount")+
+  labs(title = "Employment year")+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+grid.arrange(p1,p2,ncol =2)
 
+```
+
+From the chart above, we could see that borrowers whose home is mortgage had greater loam amount than the other three types. 
+
+For the employment length, it seems that borrowers who was just get their jobs had more loan amount than those who had already work for years.
+
+```{r, echo=FALSE, warning=FALSE}
 # 3. How loan purpose influenced loan amount?
 loanpurpose <- summarise(group_by(Loan1517,Loan1517$purpose),
                          loan_amnt = mean(loan_amnt, na.rm = TRUE))
 loanpurpose$loan_purpose <- loanpurpose$`Loan1517$purpose`
-p5 <- ggplot(loanpurpose)+
+p3 <- ggplot(loanpurpose)+
   aes(reorder(loanpurpose$loan_purpose,loan_amnt),y = log(loan_amnt),
-      color=reorder(loanpurpose$loan_purpose,loan_amnt))+
-  geom_point(size=3)+
-  xlab("purpose")+
-  labs(title = "purpose")+
+      fill=reorder(loanpurpose$loan_purpose,loan_amnt))+
+  geom_bar(stat = "identity",width = 0.5)+
+  xlab("Purpose")+
+  ylab("Loan amount")+
+  labs(title = "Purpose")+
   theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
   coord_flip()
+p3
+```
 
+Borrowers who loaned money for business, they had greater loan amount than those who loaned just for vacation. 
+
+```{r, echo=FALSE, warning=FALSE}
 # 4. How state status influenced loan amount?
 us <- map_data("state")
 arr <- USArrests %>% 
@@ -140,39 +167,47 @@ stateofloan <- Loan1517%>%
   group_by(region)%>%
   summarise(amount = sum(loan_amnt), abbr = unique(addr_state))
 stateofloan <- merge(arr, stateofloan,by = "region")
-p3 <- ggplot()+
+p4 <- ggplot()+
   geom_map(data=us, map=us, aes(x=long, y=lat, map_id=region),
            fill="#ffffff", color="#ffffff", size=0.15)+
   geom_map(data=stateofloan, map=us, aes(fill=log(amount), map_id=region), 
            color="#ffffff", size=0.15)+
   scale_fill_continuous(low='thistle2', high='darkred',guide='colorbar')+
+  ylab("Loan amount")+
   labs(x=NULL, y=NULL,title = "state")+
-  theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
   coord_map("albers", lat0 = 39, lat1 = 45) 
 # no data for Iowa
+p4
+```
 
+From the map we could clear see that loan amount in CA, TX, FL and NY is higher than other states, which reflects the financial demand in each state.
+
+```{r, echo=FALSE, warning=FALSE}
 # 5. How monthly income influenced loan amount?
 income <- summarise(group_by(Loan1517,Loan1517$monthly_inc),
                     loan_amnt = mean(loan_amnt, na.rm = TRUE))
 income$monthly_inc <- income$`Loan1517$monthly_inc`
-p4 <- ggplot(income)+
+p5 <- ggplot(income)+
   aes(x = log(monthly_inc), y =  log(loan_amnt))+
   geom_point(alpha=0.1)+
   coord_flip()+
-  labs(title = "monthly income")+
+  labs(title = "Monthly income")+
+  xlab("Monthly income")+
+  ylab("Loan amount")+
   theme(plot.title = element_text(hjust = 0.5))
-
-grid.arrange(p1,p2,ncol =2)
-grid.arrange(p5,p4,ncol =2)
-p3
+p5
 ```
 
-From the chart above, we could see that borrowers whose home is mortgage had greater loam amount than the other three types. For the employment length, it seems that borrowers who was just get their jobs had more loan amount than those who had already work for years.
-Borrowers who loaned money for business, they had greater loan amount than those who loaned just for vacation. For the monthly income, borrowers who receive higher income per month could have higher loan amount, it is reasonable since they seemd to have higher debt-paying ability, and they seemed to have more source of demand for money.
-From the map we could clear see that loan amount in CA, TX, FL and NY is higher than other states, which reflects the financial demand in each state.
+For the monthly income, borrowers who receive higher income per month could have higher loan amount, it is reasonable since they seemd to have higher debt-paying ability, and they seemed to have more source of demand for money.
 
+#### Model
 
-```{r}
+Then we fit a linear model to show the relationship between loan amount and borrower's status.
+
+\textbf{model 1} lm(log(loan_amnt) ~ log(monthly_inc) + purpose + home_ownership + emp_year + addr_state)
+
+```{r, echo=FALSE}
 # fit model
 model1_1 <- lm(log(loan_amnt) ~ log(monthly_inc) + purpose + home_ownership + 
                  emp_year + addr_state, data = Loan1517)
@@ -180,7 +215,11 @@ plot(fitted(model1_1),model1_1$residuals)
 abline(0,0, col="red")
 ```
 
-Check the residual: Residual standard error: 0.6091
+Check the residual: 
+
+Residual standard error: 0.6091.
+
+The residual plot shown above has a trend, which means that this model has problems and maybe other factors should be included into consideration.
 
 Interpret:
 
@@ -194,57 +233,17 @@ The other input, purpose, home ownership, state, is categorical so it does not m
 
 Analyze how LC assigned loan grade: How borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regreesion)
 
+#### Initial EDA: [https://dongyuanzhou.shinyapps.io/ma684_shiny/](https://dongyuanzhou.shinyapps.io/ma684_shiny/)
 
-```{r fig.height=5}
-## intial EDA
-grid.arrange(
-ggplot(Loan1517)+
-  aes(x=log(loan_amnt),y=gradenum)+
-  geom_smooth(method="lm"),
-ggplot(Loan1517)+
-  aes(x=log(monthly_inc),y=gradenum)+
-  geom_smooth(method="lm"),
-ggplot(Loan1517)+
-  aes(x=emp_year,y=gradenum)+
-  geom_smooth(method="lm"),
-ncol=3
-)
+From the link, we could see that higher loan amount, lower loan grade; lower income, lower loan grade; What's more, longer loan term means higher probability to have lower loan grade and borrowers who rent their home seems to has lower loan grade. There is not much significant diffenrence according the the EDA for loan purose and loan state. Maybe we could use the multilevel regression to show the result.
 
-grid.arrange(
-ggplot(Loan1517)+
-  aes(x=factor(year),y=gradenum,color=factor(year))+
-  geom_point()+
-  geom_violin(alpha=0.3)+
-  theme(legend.position="none"),
-ggplot(Loan1517)+
-  aes(x=home_ownership,y=gradenum,color=home_ownership)+
-  geom_point()+
-  geom_violin(alpha=0.3)+
-  theme(legend.position="none"),
-ncol=2
-)
+#### Model
 
-grid.arrange(
-ggplot(Loan1517)+
-  aes(x=purpose,y=gradenum,color=purpose)+
-  geom_point()+
-  geom_violin(alpha=0.3)+
-  theme(legend.position="none")+
-  coord_flip(),
-ggplot(Loan1517)+
-  aes(x=addr_state,y=gradenum,color=addr_state)+
-  geom_point()+
-  geom_violin(alpha=0.3)+
-  theme(legend.position="none")+
-  coord_flip(),
-ncol=2
-)
-```
+Then we fit a linear model to show the relationship between loan amount and borrower's status as well as the loan amount and loan time.
 
-From the chart above, we could see that higher loan amount, lower loan grade; lower income, lower loan grade; What's more, longer loan term means higher probability to have lower loan grade and borrowers who rent their home seems to has lower loan grade. There is not much significant diffenrence according the the EDA for loan purose and loan state. Maybe we could use the multilevel regression to show the result.
+\textbf{model 2} polr(grade ~ log(loan_amnt) + year + log(monthly_inc) + home_ownership + emp_year + purpose + addr_state)
 
-
-```{r}
+```{r, echo=FALSE}
 ## fit models
 ## model2_0
 model2_0<- polr(grade ~ log(loan_amnt) + year + log(monthly_inc) + 
@@ -258,21 +257,26 @@ AIC: 567425.20
 
 Interpret:
 
-statistical significant: Loan amount, term, monthly income
-
-not significant: addrstate, employment year, purpose,home ownership
-
 We get emp_year that is positive and insignificant contrary to our expectation. It seems reasonable to remove emp_year variable from our model. Meanwhile, according to the industry regulation, loan purpose and state of loan has little significance compared to monthly income and loan amount.
 
 Therefore, we consider a new model for the grade of loan as a function of loan amount, loan term and borrower's monthly income.
 
+\textbf{model 3} polr(grade ~ log(loan_amnt) + year + log(monthly_inc))
 
-```{r}
+```{r, echo=FALSE}
 ## model2_1 
 model2_1<- polr(grade ~ log(loan_amnt) + year + log(monthly_inc), 
                 data = Loan1517)
 summary(model2_1)
+```
 
+Check rediduals: Residual Deviance: 575377.17 
+
+AIC: 575395.17 
+
+Then we predict the loan grade for loan term between 3 years to 5 years, monthly income equals 1000 to 40000 and loan amount equals 1000 to 300000.
+
+```{r, echo=FALSE}
 predx<-expand.grid(loan_amnt=seq(1000,40000,length.out=5),
                    year=3:5,monthly_inc=seq(1000,300000,length.out=5))
 predy<-predict(model2_1,newdata=predx,type="prob")
@@ -286,19 +290,15 @@ ggplot(melt(data.frame(predx,predy),
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Check rediduals: Residual Deviance: 575377.17 
-
-AIC: 575395.17 
-
-#### 3. After laon ended (Data: 2007-2011)
+### 3. After laon ended (Data: 2007-2011)
 
 Summarize default rate for each state.(Multilevel logistic regression)
 
 dti: Debt to income ratio
 
+#### Initial EDA
 
-```{r}
-## fixed effect
+```{r, echo=FALSE, warning=FALSE}
 default <- Loan0711%>%
   group_by(region)%>%
   summarise(defrate = sum(default)/length(default))
@@ -309,24 +309,36 @@ ggplot()+
   geom_map(data=default, map=us, aes(fill=defrate, map_id=region), 
            color="#ffffff", size=0.15)+
   scale_fill_continuous(low='thistle2', high='darkred',guide='colorbar')+
-  labs(x=NULL, y=NULL,title = "default rate of state")+
-  theme(plot.title = element_text(hjust = 0.5),legend.position="none")
+  labs(x=NULL, y=NULL,title = "Default rate in different state")+
+  theme(plot.title = element_text(hjust = 0.5),legend.position="none")+
   coord_map("albers", lat0 = 39, lat1 = 45)
-
-model3_0 <- glm(default ~ gradenum + dti, family=binomial, data = Loan0711)
-mmps(model3_0)
-binnedplot(fitted(model3_0),residuals(model3_0,type="response"))
-errorrate_model3_0 <- mean((predict(model3_0) > 0.5 & Loan0711$default == 0) |
-                             (predict(model3_0) < 0.5 & Loan0711$default == 1))
 
 Loan0711$dtiindex <- ifelse(Loan0711$dti < 0.10,"0-0.1",
                             ifelse(Loan0711$dti <0.20,"0.10-0.20","0.2+"))
 ggplot(Loan0711)+aes(x=grade,fill=factor(default))+
 geom_bar(position="fill")+facet_grid(~dtiindex)+
 labs(title = "Default rate according to dti and loan grade")+
-scale_fill_manual(values=c("seagreen4","red3"))+ylab("default rate")+xlab("grade")+
+scale_fill_manual(values=c("seagreen4","red3"))+ylab("Default rate")+xlab("Grade")+
   theme(plot.title = element_text(hjust = 0.5),legend.position="none")
 ```
+
+#### Model
+
+First, we fit a logistic model to show the relationship between the default rate and loan grade as well as the Debt to income ratio.
+
+\textbf{model 4} glm(default ~ gradenum + dti, family=binomial)
+
+```{r, echo=FALSE, warning=FALSE}
+model3_0 <- glm(default ~ gradenum + dti, family=binomial, data = Loan0711)
+mmps(model3_0)
+binnedplot(fitted(model3_0),residuals(model3_0,type="response"))
+errorrate_model3_0 <- mean((predict(model3_0) > 0.5 & Loan0711$default == 0) |
+                             (predict(model3_0) < 0.5 & Loan0711$default == 1))
+```
+
+Check model:
+
+From the binned plot, we could see a disturbing pattern, with an extreme negative residual in the last bins: people in the lowest bin are about 10% less likely to default than is predicted by the model.
 
 The error rate for the model is 16%.
 
@@ -348,14 +360,20 @@ The loan in grade F is 1.94/4=49% more likely to default than loan in grade A.
 
 The loan in grade G is 1.82/4=46% more likely to default than loan in grade A.
 
+Since state and purpose may also has influence on the default rate, we fit multilevel model to see if there is some difference between state as well as purpose.
 
-```{r}
+\textbf{model 5} glmer(default ~ gradenum + dti + (1|addr_state), family=binomial(link="logit"))
+
+\textbf{model 6} glmer(default ~ gradenum + dti + (1 + gradenum|addr_state), family=binomial(link="logit"))
+
+```{r, echo=FALSE}
 ## Multilevel model
 # state
 model3_2 <- glmer(default ~ gradenum + dti + (1|addr_state), 
                   family=binomial(link="logit"), data = Loan0711)
 model3_1 <- glmer(default ~ gradenum + dti + (1 + gradenum|addr_state), 
                   family=binomial(link="logit"), data = Loan0711)
+
 a.hat.model3_2 <- fixef(model3_2)[1] + ranef(model3_2)$addr_state 
 b.hat.model3_2 <- fixef(model3_2)[2]
 c.hat.model3_2 <- fixef(model3_2)[3]
@@ -379,7 +397,13 @@ curve (invlogit(a.hat.model3_1[j,] + b.hat.model3_1[j,]*x + c.hat.model3_1*dti[j
 curve (invlogit(a.hat.model3_2[j,] + b.hat.model3_2*x + c.hat.model3_2*dti[j]), 
        col="blue", add=TRUE)
 }
+```
 
+\textbf{model 7} glmer(default ~ gradenum + dti + (1|purpose), family=binomial(link="logit"))
+
+\textbf{model 8} glmer(default ~ gradenum + dti + (1 + gradenum|purpose), family=binomial(link="logit"))
+
+```{r, echo=FALSE, warning=FALSE}
 # purpose
 model4_2 <- glmer(default ~ gradenum + dti + (1|purpose), 
                   family=binomial(link="logit"), data = Loan0711)
@@ -410,6 +434,37 @@ curve (invlogit(a.hat.model4_2[j,] + b.hat.model4_2*x + c.hat.model4_2*dti[j]),
 }
 ```
 
+From the plot above, we could see that there is some difference if we include state as random effect, especially in CA.
+
+Also, there is difference for the house purpose when we include it as random effect.
+
+Then we fit a mixed effect model and show the result in CA, we could see that the difference is not very precise. 
+
+```{r, echo=FALSE, warning=FALSE}
+model5_1 <- glmer(default ~ gradenum + dti +(1|addr_state) + (1 + gradenum|purpose), 
+                  family=binomial(link="logit"), data = Loan0711)
+
+example <- draw(model5_1, type = 'average', varList = list("addr_state" = "CA"))
+
+tempdf <- wiggle(example, var = "gradenum", c(1:7))
+tempdf <- wiggle(tempdf, var = "purpose", 
+                    unique(Loan0711$purpose))
+tempdf$yhat <- predict(model5_1, newdata = tempdf, type = "response",allow.new.levels = TRUE)
+
+exampPreds <- predictInterval(model5_1, newdata = tempdf, 
+                              type = "probability", 
+                              include.resid.var = FALSE, level = 0.8)
+tempdf <- cbind(tempdf[, c(1:6)], exampPreds)
+
+ggplot(tempdf, aes(x = purpose, y = fit, ymin = lwr, ymax = upr, 
+                   group = gradenum)) + 
+  geom_ribbon(aes(fill = factor(gradenum)), alpha = I(0.2), color = I("black"))+ 
+  geom_line(aes(color = factor(gradenum))) + 
+  theme_bw() + ylim(c(0, 1)) + labs(title = "Default Rate in CA")+
+  theme(axis.text.x = element_text(angle = 20), 
+        legend.position = "bottom") + labs(x = "Purpose", y = "Probability")
+```
+
 ### 4. Discussion
 
 \textbf{1. Result}
@@ -432,4 +487,11 @@ Combine the bank interest rate in each years analysis is what we could consider 
 Moreover, since the loan is always span 3-5 years or more, maybe we could track the result years later.
 
 # Appendix and reference
-https://www.lendingclub.com/info/download-data.action
+
+Data source: [https://www.lendingclub.com/info/download-data.action](https://www.lendingclub.com/info/download-data.action)
+
+Code for data cleaning: ["data clean.R"](https://github.com/DongyuanZhou/MA684-Project/blob/master/data%20clean.R)
+
+Code for model: ["MA684 Project.Rmd"](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.Rmd)
+
+Initial EDA: [https://dongyuanzhou.shinyapps.io/ma684_shiny/](https://dongyuanzhou.shinyapps.io/ma684_shiny/)

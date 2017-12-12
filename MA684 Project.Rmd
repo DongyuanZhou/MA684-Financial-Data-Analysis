@@ -492,6 +492,6 @@ Data source: [https://www.lendingclub.com/info/download-data.action](https://www
 
 Code for data cleaning: ["data clean.R"](https://github.com/DongyuanZhou/MA684-Project/blob/master/data%20clean.R)
 
-Code for model: ["MA684 Project.Rmd"](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.Rmd)
+Code and output for model: ["MA684 Project.Rmd"](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.Rmd)
 
 Initial EDA: [https://dongyuanzhou.shinyapps.io/ma684_shiny/](https://dongyuanzhou.shinyapps.io/ma684_shiny/)

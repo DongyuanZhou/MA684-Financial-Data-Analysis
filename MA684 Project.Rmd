@@ -440,7 +440,7 @@ Also, there is difference for the house purpose when we include it as random eff
 
 Then we fit a mixed effect model and show the result in CA, we could see that the difference is not very precise. 
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 model5_1 <- glmer(default ~ gradenum + dti +(1|addr_state) + (1 + gradenum|purpose), 
                   family=binomial(link="logit"), data = Loan0711)
 

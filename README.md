@@ -1,5 +1,5 @@
-# MA684-Project
-Financial data analysis
+# MA684-Project: Financial data analysis
+Dongyuan Zhou
 ## Background
 In the financial field, making decisions on whether to lend money to borrowers is one of the most important work. A whole cycle of this work usually includes the following two steps. 
 

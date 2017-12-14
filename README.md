@@ -1,3 +1,4 @@
+![lc-logo-official-min](https://user-images.githubusercontent.com/32685027/33977385-a159355c-e068-11e7-975d-9037ba1ef038.png)
 
 # MA684-Project: Financial data analysis
 Dongyuan Zhou
@@ -10,7 +11,7 @@ Secondly, summarize the default rate and improve the former step to avoid defaul
 
 ## Goals
 
-In this analysis, we analyze data from Lending club (LC): ![lc-logo-official-min](https://user-images.githubusercontent.com/32685027/33977385-a159355c-e068-11e7-975d-9037ba1ef038.png)
+In this analysis, we analyze data from Lending club (LC): 
 
 **Stage1: Before loan was funded (Data: 2015-2017)**
 

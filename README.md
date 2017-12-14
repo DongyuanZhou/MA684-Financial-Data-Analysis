@@ -213,9 +213,9 @@ Moreover, since the loan is always span 3-5 years or more, maybe we could track 
 
 Data source: [_https://www.lendingclub.com/info/download-data.action_](https://www.lendingclub.com/info/download-data.action)
 
-Code for Data Cleaning: ["data clean.R"](https://github.com/DongyuanZhou/MA684-Project/blob/master/data%20clean.R)
+Code for Data Cleaning: [data clean.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/data%20clean.R)
 
-Code for EDA and Model: 
+Code for EDA and Model: [MA684 Project.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.R)
 
 Code for Shiny App：
 

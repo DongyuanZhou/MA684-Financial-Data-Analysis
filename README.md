@@ -214,11 +214,13 @@ Moreover, since the loan is always span 3-5 years or more, maybe we could track 
 
 Data source: [_https://www.lendingclub.com/info/download-data.action_](https://www.lendingclub.com/info/download-data.action)
 
+Lending Club Logo: [_https://blog.lendingclub.com/wp-content/uploads/2017/05/LC-Logo-Official-min.png_](https://blog.lendingclub.com/wp-content/uploads/2017/05/LC-Logo-Official-min.png)
+
 Code for Data Cleaning: [data clean.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/data%20clean.R)
 
 Code for EDA and Model: [MA684 Project.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.R)
 
 Code for Shiny App：[Loangrade_shiny.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/Loangrade_shiny.R)
 
-Lending Club Logo: [_https://blog.lendingclub.com/wp-content/uploads/2017/05/LC-Logo-Official-min.png_](https://blog.lendingclub.com/wp-content/uploads/2017/05/LC-Logo-Official-min.png)
+
 

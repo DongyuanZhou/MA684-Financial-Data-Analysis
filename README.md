@@ -38,7 +38,7 @@ Before we do any analysis or fit any models, it is interesting to show the loan 
 
 As shown in the plot above: 
 
-Higher loan amount request always have longer loan term;
+Higher loan amount request always has longer loan term;
 
 Borrowers who work for more than 10 years or just participant in their career have larger loan amount request;
 
@@ -95,7 +95,7 @@ Check residuals: Residual Deviance: 575377.17
 
 AIC: 575395.17 
 
-Then we made a [shiny app](https://dongyuanzhou.shinyapps.io/Loan_grade_shiny/) to simulate how LC assigned loan grade using the new model.
+Then we made a [_shiny app_](https://dongyuanzhou.shinyapps.io/Loan_grade_shiny/) to simulate how LC assigned loan grade using the new model.
 
 
 ### 2. After loan ended
@@ -106,7 +106,7 @@ We use data from 2007 to 2011 analyzing the relationship between whether default
 
 We could see that loans with lower grade seems have higher probability to be default.
 
-What's more, whether default or not with the same loan grade is different in each state and for various loan purpose. We are not sure if these factors is important so far, and we could include these factors as the group level in our model later to see the result.
+What's more, whether default or not with the same loan grade is different in each state and for various loan purpose. We are not sure if these factors are important so far, and we could include these factors as the group level in our model later to see the result.
 
 #### Model
 
@@ -121,7 +121,7 @@ From the binned residual plot, we could see a disturbing pattern, with an extrem
 
 The error rate for the model is 16%.
 
-1 sd increase in debt-to-income ratio has a multiple effect of exp(0.01)=1.01 on odds od default,controling grade in same level.
+1 sd increase in debt-to-income ratio has a multiple effect of exp(0.01)=1.01 on odds of default, controling grade in same level.
 
 The odds ratio of default for grade A vs grade G is exp(1.8)= 6.05
 
@@ -137,13 +137,17 @@ The loan in grade F is 1.94/4=49% more likely to default than loan in grade A.
 
 The loan in grade G is 1.82/4=46% more likely to default than loan in grade A.
 
-Since state and purpose may also has influence on the default rate, we fit multilevel model to see if there is some difference between state as well as purpose.
+Since state and purpose may also have influence on the default rate, we fit multilevel model to see if there is some difference between state as well as purpose.
 
 **glmer(default ~ gradenum + dti + (1|purpose) + (1|addr_state), family=binomial(link="logit"))**
 
+From the predictive result, we could see that although it is better than the former model, there is obvious difference between the original data and the prediction. 
+
+We could not find other factors, maybe we need to consider about Bayesian...?
+
 ### 3. After loan ended (Data: 2015-2017)
 
-Predict the default rate for loan in 2015-2017.
+Based on the model we fit, we predict the default rate for the loan between 2015-2017. 
 
 ### 4. Discussion
 
@@ -151,13 +155,13 @@ Predict the default rate for loan in 2015-2017.
 
 From this analysis report, we could know that the loan grade is significantly related to loan amount and loan term. What's more, if borrower had another mortgage, the grade would be higher as expected. This is reasonable, since their credit quality had checked by other institutions. However, the employment year is not such related as common sense, and this is a point that could be analyze deeper.
 
-For default rate, the higher grade reflect the lower default rate. What's more, the initial debt to income ratio is also important. From the analysis, we could give suggestion that grade F and grade G has really high default rate, and reject their loan request may be a better desicion.
+For default rate, the higher grade reflects the lower default rate. What's more, the initial debt to income ratio is also important. From the analysis, we could give suggestion that grade F and grade G has really high default rate, and reject their loan request may be a better decision.
 
 **Data limitation**
 
 Since the credit information is private, we cannot track the whole process for each loan. 
 
-What's more, the FICO Score should be an important predictor in this analysis,however, since it is personal privacy, we could not get the data. Therefore, just consider about the factor as home ownership and income has its limitation.
+What's more, the FICO Score should be an important predictor in this analysis, however, since it is personal privacy, we could not get the data. Therefore, just consider about the factor as home ownership and income has its limitation.
 
 Finally, since the financial market and the interest rate policy has changed during years, credit quality could not be the only factor of default. Other investment chances and bank loan should be considered and the time span is important.
 

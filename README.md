@@ -13,15 +13,15 @@ In this analysis, we analyze data from Lending club (LC):
 
 **Stage1: Before loan was funded (Data: 2015-2017)**
 
-Analyze how LC assigned loan grade: How borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regreesion)
+Analyze how LC assigned loan grade: How borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regression)
 
-**Stage2: After laon ended (Data: 2007-2011)**
+**Stage2: After loan ended (Data: 2007-2011)**
 
 Analyze the relationship between loan grade and default rate (Multilevel logistic regression)
 
-**Stage3: After laon ended (Data: 2015)**
+**Stage3: After loan ended (Data: 2015-2017)**
 
-Predict the default rate for laon in 2015
+Predict the default rate for loan in 2015-2017
 
 **Stage4: Summarize and Discussion**
 
@@ -52,7 +52,7 @@ All these information is important for the portfolio manager after the company l
 
 ### 1. Before loan was funded
 
-We use the data from 2015 to 2017 analyzing how LC assigned loan grade. To be more specific, we try to fit models to show how borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regreesion)
+We use the data from 2015 to 2017 analyzing how LC assigned loan grade. To be more specific, we try to fit models to show how borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regression)
 
 #### Initial EDA: 
 From the chart above, we could see that:
@@ -67,7 +67,7 @@ Home ownership as mortgage has higher grade.
 
 It is reasonable to consider borrower's state, employment year and loan purpose as factors, since there is financial environment difference in different state, and longer employment year seems to have more stable income.
 
-However, there is not much significant difference according the the EDA for those three factors. 
+However, there is not much significant difference according the EDA for those three factors. 
 
 Maybe we could use the multilevel regression to show the result.
 
@@ -91,20 +91,20 @@ Therefore, we consider a new model for the grade of loan as a function of loan a
 
 **polr(grade ~ log(loan_amnt) + year + log(monthly_inc) + home_ownership)**
 
-Check rediduals: Residual Deviance: 575377.17 
+Check residuals: Residual Deviance: 575377.17 
 
 AIC: 575395.17 
 
 Then we made a [shiny app](https://dongyuanzhou.shinyapps.io/Loan_grade_shiny/) to simulate how LC assigned loan grade using the new model.
 
 
-### 2. After laon ended
+### 2. After loan ended
 
 We use data from 2007 to 2011 analyzing the relationship between whether default or not and loan grade. (Multilevel logistic regression)
 
 #### Initial EDA
 
-We could see that loans woth lower grade seems have higher probability to be default.
+We could see that loans with lower grade seems have higher probability to be default.
 
 What's more, whether default or not with the same loan grade is different in each state and for various loan purpose. We are not sure if these factors is important so far, and we could include these factors as the group level in our model later to see the result.
 
@@ -114,7 +114,7 @@ Our main objective is to find out whether we can use the loan grade to predict t
 
 Besides the loan grade, our predictors also include debt to income ratio. 
 
-We fit a logistic model to show the quantitative relationship between whether default or not and loan grade. Besides the laon grade and debt to income ratio, we add loan purpose and state as the group level, which include the information of different purpose and state's random effect to our model outcome.
+We fit a logistic model to show the quantitative relationship between whether default or not and loan grade. Besides the loan grade and debt to income ratio, we add loan purpose and state as the group level, which include the information of different purpose and state's random effect to our model outcome.
 
 **glm(default ~ gradenum + dti, family=binomial)**
 
@@ -164,7 +164,7 @@ Finally, since the financial market and the interest rate policy has changed dur
 
 **Future directions**
 
-Combine the bank interest rate in each years analysis is what we could consider deeper, and basic financial knowledge is required.
+Combine the bank interest rate in each year's analysis is what we could consider deeper, and basic financial knowledge is required.
 Moreover, since the loan is always span 3-5 years or more, maybe we could track the result years later.
 
 # Appendix and reference

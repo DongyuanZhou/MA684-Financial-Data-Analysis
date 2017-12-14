@@ -112,8 +112,7 @@ What's more, whether default or not with the same loan grade is different in eac
 
 Our main objective is to find out whether we can use the loan grade to predict the loan might be default or not. 
 
-Besides the loan grade, our predictors also include debt to income ratio. 
-
+Besides the loan grade, our predictors also include debt to income ratio.
 We fit a logistic model to show the quantitative relationship between whether default or not and loan grade. Besides the loan grade and debt to income ratio, we add loan purpose and state as the group level, which include the information of different purpose and state's random effect to our model outcome.
 
 **glm(default ~ gradenum + dti, family=binomial)**
@@ -142,7 +141,7 @@ Since state and purpose may also has influence on the default rate, we fit multi
 
 **glmer(default ~ gradenum + dti + (1|purpose) + (1|addr_state), family=binomial(link="logit"))**
 
-### 3. After laon ended (Data: 2015-2017)
+### 3. After loan ended (Data: 2015-2017)
 
 Predict the default rate for loan in 2015-2017.
 

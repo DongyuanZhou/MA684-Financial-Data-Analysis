@@ -207,7 +207,7 @@ Finally, since the financial market and the interest rate policy has changed dur
 **Future directions**
 
 Combine the bank interest rate in each year's analysis is what we could consider deeper, and basic financial knowledge is required.
-Moreover, since the loan is always span 3-5 years or more, maybe we could track the result years later.
+Moreover, since the loan is always span 3-5 years or more, maybe we could track the result not far from now, just when the loan term end.
 
 # Appendix and reference
 
@@ -217,6 +217,4 @@ Code for Data Cleaning: [data clean.R](https://github.com/DongyuanZhou/MA684-Pro
 
 Code for EDA and Model: [MA684 Project.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.R)
 
-Code for Shiny App：
-
-pdf file:
+Code for Shiny App：[Loangrade_shiny.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/Loangrade_shiny.R)

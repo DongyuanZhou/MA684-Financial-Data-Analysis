@@ -69,22 +69,19 @@ We use the data from 2015 to 2017 analyzing how LC assigned loan grade. To be mo
 
 ![1 1](https://user-images.githubusercontent.com/32685027/33976182-34182f40-e061-11e7-95ff-f449023289e3.png)
 
+Higher loan amount, lower loan grade;
+
 ![1 2](https://user-images.githubusercontent.com/32685027/33976183-34482998-e061-11e7-9db2-a55e4863d3c5.png)
 
 ![1 3](https://user-images.githubusercontent.com/32685027/33976184-3468fcc2-e061-11e7-8b83-b240fd091fc2.png)
 
+Lower income, lower loan grade; 
+
 ![1 4](https://user-images.githubusercontent.com/32685027/33976186-348c07da-e061-11e7-989d-741c363eea0d.png)
-
-![1 5](https://user-images.githubusercontent.com/32685027/33976187-34aeac72-e061-11e7-8b2a-c12ef5f5e2ad.png)
-
-
-From the chart above, we could see that:
-
-Higher loan amount, lower loan grade; 
 
 Longer loan term, lower loan grade;
 
-Lower income, lower loan grade; 
+![1 5](https://user-images.githubusercontent.com/32685027/33976187-34aeac72-e061-11e7-8b2a-c12ef5f5e2ad.png)
 
 Home ownership as mortgage has higher grade.
 
@@ -128,12 +125,12 @@ We use data from 2007 to 2011 analyzing the relationship between whether default
 
 ![2 1](https://user-images.githubusercontent.com/32685027/33976188-34d08216-e061-11e7-825e-50c58e23a4e7.png)
 
+We could see that loans with lower grade seems have higher probability to be default.
+
 ![2 2](https://user-images.githubusercontent.com/32685027/33976189-34f1a982-e061-11e7-9438-d8dbc19bc8d7.png)
 
 ![2 3](https://user-images.githubusercontent.com/32685027/33976190-3517c72a-e061-11e7-9fe1-37dba538160e.png)
 
-
-We could see that loans with lower grade seems have higher probability to be default.
 
 What's more, whether default or not with the same loan grade is different in each state and for various loan purpose. We are not sure if these factors are important so far, and we could include these factors as the group level in our model later to see the result.
 

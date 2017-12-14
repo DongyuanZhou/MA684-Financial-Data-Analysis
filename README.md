@@ -37,24 +37,27 @@ To get reasonable analysis, we only choose the data which had been verified by L
 ### 0. Loan amount
 Before we do any analysis or fit any models, it is interesting to show the loan amount request distribution in our data. Although we cannot go deeper analysis for this topic with the data we have so far, in the industry, this could help the company deciding the asset allocation and portfolio management. 
 
-![0 1](https://user-images.githubusercontent.com/32685027/33975472-d783a0d8-e05c-11e7-836d-b1a9d279b459.png)
-![0 2](https://user-images.githubusercontent.com/32685027/33975499-0467a04a-e05d-11e7-9377-ddbfda5ec7fb.png)
-![0 3](https://user-images.githubusercontent.com/32685027/33975507-0c558254-e05d-11e7-91b5-08183fac1347.png)
-![0 4](https://user-images.githubusercontent.com/32685027/33975522-18f51a4c-e05d-11e7-8736-1fd2a7864388.png)
-![0 5](https://user-images.githubusercontent.com/32685027/33975527-209f858e-e05d-11e7-994b-489c57888f40.png)
-![0 6](https://user-images.githubusercontent.com/32685027/33975534-2a8157bc-e05d-11e7-9c51-3a71ff817530.png)
-
-As shown in the plot above: 
+![0 1](https://user-images.githubusercontent.com/32685027/33976176-334809c8-e061-11e7-9bf7-6b48a55d2de2.png)
 
 Higher loan amount request always has longer loan term;
 
-Borrowers who work for more than 10 years or just participant in their career have larger loan amount request;
+![0 2](https://user-images.githubusercontent.com/32685027/33976177-336a9420-e061-11e7-9cec-6117332e8e36.png)
+
+Loan with large amount seems more likely to be default in the end.
+
+![0 3](https://user-images.githubusercontent.com/32685027/33976178-338c4340-e061-11e7-986c-9b7782a1b15d.png)
 
 Borrowers whose home is mortgage have larger loan amount request;
 
+![0 4](https://user-images.githubusercontent.com/32685027/33976179-33ad0a9e-e061-11e7-8c86-e79c5070db99.png)
+
 The loan amount seems lower for the vacation purpose and higher for the debt consolidation purpose;
 
-Loan with large amount seems more likely to be default in the end.
+![0 5](https://user-images.githubusercontent.com/32685027/33976180-33cfd7a4-e061-11e7-9e2d-03cd2c25e9fb.png)
+
+Borrowers who work for more than 10 years or just participant in their career have larger loan amount request;
+
+![0 6](https://user-images.githubusercontent.com/32685027/33976181-33f0d2ec-e061-11e7-8e27-a2a6e0caeb49.png)
 
 All these information is important for the portfolio manager after the company lend out the money as well as receive the loan.
 
@@ -64,10 +67,16 @@ We use the data from 2015 to 2017 analyzing how LC assigned loan grade. To be mo
 
 #### Initial EDA: 
 
-![1 1](https://user-images.githubusercontent.com/32685027/33975542-37434294-e05d-11e7-8454-22410a54e589.png)
-![1 2](https://user-images.githubusercontent.com/32685027/33975551-4ad53894-e05d-11e7-9163-2391a92cf201.png)
-![1 3](https://user-images.githubusercontent.com/32685027/33975563-547e4eb2-e05d-11e7-806f-cf90a41ec622.png)
-![1 4](https://user-images.githubusercontent.com/32685027/33975564-548c80ae-e05d-11e7-9704-07bdb28f5215.png)
+![1 1](https://user-images.githubusercontent.com/32685027/33976182-34182f40-e061-11e7-95ff-f449023289e3.png)
+
+![1 2](https://user-images.githubusercontent.com/32685027/33976183-34482998-e061-11e7-9db2-a55e4863d3c5.png)
+
+![1 3](https://user-images.githubusercontent.com/32685027/33976184-3468fcc2-e061-11e7-8b83-b240fd091fc2.png)
+
+![1 4](https://user-images.githubusercontent.com/32685027/33976186-348c07da-e061-11e7-989d-741c363eea0d.png)
+
+![1 5](https://user-images.githubusercontent.com/32685027/33976187-34aeac72-e061-11e7-8b2a-c12ef5f5e2ad.png)
+
 
 From the chart above, we could see that:
 
@@ -117,9 +126,12 @@ We use data from 2007 to 2011 analyzing the relationship between whether default
 
 #### Initial EDA
 
-![2 1](https://user-images.githubusercontent.com/32685027/33975589-6a85492c-e05d-11e7-8cee-5bc7037224fd.png)
-![2 2](https://user-images.githubusercontent.com/32685027/33975590-6a929b72-e05d-11e7-967a-6441a72eb8fb.png)
-![2 3](https://user-images.githubusercontent.com/32685027/33975592-6a9f7a0e-e05d-11e7-9b33-64324006abdf.png)
+![2 1](https://user-images.githubusercontent.com/32685027/33976188-34d08216-e061-11e7-825e-50c58e23a4e7.png)
+
+![2 2](https://user-images.githubusercontent.com/32685027/33976189-34f1a982-e061-11e7-9438-d8dbc19bc8d7.png)
+
+![2 3](https://user-images.githubusercontent.com/32685027/33976190-3517c72a-e061-11e7-9fe1-37dba538160e.png)
+
 
 We could see that loans with lower grade seems have higher probability to be default.
 
@@ -134,8 +146,9 @@ We fit a logistic model to show the quantitative relationship between whether de
 
 **glm(default ~ gradenum + dti, family=binomial)**
 
-![2 4](https://user-images.githubusercontent.com/32685027/33975601-7dfe3e3c-e05d-11e7-931d-a2f3ccbf2cf3.png)
-![2 5](https://user-images.githubusercontent.com/32685027/33975602-7e0b4032-e05d-11e7-9bc6-0d90c1c89309.png)
+![2 4](https://user-images.githubusercontent.com/32685027/33976191-353914ca-e061-11e7-839d-e4a9403ebc9f.png)
+
+![2 5](https://user-images.githubusercontent.com/32685027/33976192-355c7122-e061-11e7-8ceb-eaeac77cfd47.png)
 
 
 From the binned residual plot, we could see a disturbing pattern, with an extreme positive and negative residual in the middle bin: people in the middle bin are more or less likely to default than is predicted by the model.
@@ -162,8 +175,10 @@ Since state and purpose may also have influence on the default rate, we fit mult
 
 **glmer(default ~ gradenum + dti + (1|purpose) + (1|addr_state), family=binomial(link="logit"))**
 
-![2 6](https://user-images.githubusercontent.com/32685027/33975604-7e19328c-e05d-11e7-9690-3f82d93eee13.png)
-![2 7](https://user-images.githubusercontent.com/32685027/33975623-9ceb4c86-e05d-11e7-96a2-65364eb2f19f.png)
+![2 6](https://user-images.githubusercontent.com/32685027/33976193-357fad2c-e061-11e7-9000-29821c55f95d.png)
+
+![2 7](https://user-images.githubusercontent.com/32685027/33976195-35a4145a-e061-11e7-8f2b-c227effe3f6f.png)
+
 
 From the predictive result, we could see that although it is better than the former model, there is obvious difference between the original data and the prediction. 
 
@@ -173,7 +188,8 @@ We could not find other factors, maybe we need to consider about Bayesian...?
 
 Based on the model we fit, we predict the default rate for the loan between 2015-2017.
 
-![3 1](https://user-images.githubusercontent.com/32685027/33975624-9cf93f12-e05d-11e7-93c0-012b85347e4f.png)
+![3 1](https://user-images.githubusercontent.com/32685027/33976196-35c7f320-e061-11e7-90de-82d62a873b57.png)
+
 
 ### 4. Discussion
 

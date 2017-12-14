@@ -118,7 +118,27 @@ We fit a logistic model to show the quantitative relationship between whether de
 
 **glm(default ~ gradenum + dti, family=binomial)**
 
-From the binned residual plot, we could see a disturbing pattern, with an extreme positive and negative residual in the middle bins: people in the middle bin are more or less likely to default than is predicted by the model.
+From the binned residual plot, we could see a disturbing pattern, with an extreme positive and negative residual in the middle bin: people in the middle bin are more or less likely to default than is predicted by the model.
+
+The error rate for the model is 16%.
+
+1 sd increase in debt-to-income ratio has a multiple effect of exp(0.01)=1.01 on odds od default,controling grade in same level.
+
+The odds ratio of default for grade A vs grade G is exp(1.8)= 6.05
+
+The loan in grade B is 0.75/4=19% more likely to default than loan in grade A.
+
+The loan in grade C is 1.13/4=28% more likely to default than loan in grade A.
+
+The loan in grade D is 1.38/4=35% more likely to default than loan in grade A.
+
+The loan in grade E is 1.70/4=43% more likely to default than loan in grade A.
+
+The loan in grade F is 1.94/4=49% more likely to default than loan in grade A.
+
+The loan in grade G is 1.82/4=46% more likely to default than loan in grade A.
+
+Since state and purpose may also has influence on the default rate, we fit multilevel model to see if there is some difference between state as well as purpose.
 
 **glmer(default ~ gradenum + dti + (1|purpose) + (1|addr_state), family=binomial(link="logit"))**
 

@@ -1,3 +1,4 @@
+
 ![lc-logo-official-min](https://user-images.githubusercontent.com/32685027/33977385-a159355c-e068-11e7-975d-9037ba1ef038.png)
 
 # MA684-Project: Financial data analysis
@@ -33,6 +34,13 @@ Assessment of	the	result. Discuss about the data limitations and future	directio
 Data source: [_https://www.lendingclub.com/info/download-data.action_](https://www.lendingclub.com/info/download-data.action)
 
 To get reasonable analysis, we only choose the data which had been verified by LC.
+
+In the default rate part, we transform loan grade to grade number:
+
+Grade | A | B | C | D | E | F | G 
+--- | --- | --- | --- |--- |--- |--- |---
+Grade Number | 7 | 6 | 5 | 4 | 3 | 2 | 1 
+
 
 ## Analysis
 ### 0. Loan amount

@@ -1,3 +1,4 @@
+
 # MA684-Project: Financial data analysis
 Dongyuan Zhou
 ## Background
@@ -36,6 +37,13 @@ To get reasonable analysis, we only choose the data which had been verified by L
 ### 0. Loan amount
 Before we do any analysis or fit any models, it is interesting to show the loan amount request distribution in our data. Although we cannot go deeper analysis for this topic with the data we have so far, in the industry, this could help the company deciding the asset allocation and portfolio management. 
 
+![0 1](https://user-images.githubusercontent.com/32685027/33975472-d783a0d8-e05c-11e7-836d-b1a9d279b459.png)
+![0 2](https://user-images.githubusercontent.com/32685027/33975499-0467a04a-e05d-11e7-9377-ddbfda5ec7fb.png)
+![0 3](https://user-images.githubusercontent.com/32685027/33975507-0c558254-e05d-11e7-91b5-08183fac1347.png)
+![0 4](https://user-images.githubusercontent.com/32685027/33975522-18f51a4c-e05d-11e7-8736-1fd2a7864388.png)
+![0 5](https://user-images.githubusercontent.com/32685027/33975527-209f858e-e05d-11e7-994b-489c57888f40.png)
+![0 6](https://user-images.githubusercontent.com/32685027/33975534-2a8157bc-e05d-11e7-9c51-3a71ff817530.png)
+
 As shown in the plot above: 
 
 Higher loan amount request always has longer loan term;
@@ -55,6 +63,12 @@ All these information is important for the portfolio manager after the company l
 We use the data from 2015 to 2017 analyzing how LC assigned loan grade. To be more specific, we try to fit models to show how borrower's status as well as the loan amount and loan time influenced loan grade? (Multinomial regression)
 
 #### Initial EDA: 
+
+![1 1](https://user-images.githubusercontent.com/32685027/33975542-37434294-e05d-11e7-8454-22410a54e589.png)
+![1 2](https://user-images.githubusercontent.com/32685027/33975551-4ad53894-e05d-11e7-9163-2391a92cf201.png)
+![1 3](https://user-images.githubusercontent.com/32685027/33975563-547e4eb2-e05d-11e7-806f-cf90a41ec622.png)
+![1 4](https://user-images.githubusercontent.com/32685027/33975564-548c80ae-e05d-11e7-9704-07bdb28f5215.png)
+
 From the chart above, we could see that:
 
 Higher loan amount, lower loan grade; 
@@ -86,7 +100,6 @@ Interpret:
 We get the coefficient of employment length that is positive and insignificant contrary to our expectation. It seems reasonable to remove this variable from our model. 
 
 Meanwhile, loan purpose and state of loan has little significance compared to monthly income and loan amount.
-
 Therefore, we consider a new model for the grade of loan as a function of loan amount, loan term and borrower's monthly income as well as home ownership.
 
 **polr(grade ~ log(loan_amnt) + year + log(monthly_inc) + home_ownership)**
@@ -104,6 +117,10 @@ We use data from 2007 to 2011 analyzing the relationship between whether default
 
 #### Initial EDA
 
+![2 1](https://user-images.githubusercontent.com/32685027/33975589-6a85492c-e05d-11e7-8cee-5bc7037224fd.png)
+![2 2](https://user-images.githubusercontent.com/32685027/33975590-6a929b72-e05d-11e7-967a-6441a72eb8fb.png)
+![2 3](https://user-images.githubusercontent.com/32685027/33975592-6a9f7a0e-e05d-11e7-9b33-64324006abdf.png)
+
 We could see that loans with lower grade seems have higher probability to be default.
 
 What's more, whether default or not with the same loan grade is different in each state and for various loan purpose. We are not sure if these factors are important so far, and we could include these factors as the group level in our model later to see the result.
@@ -116,6 +133,10 @@ Besides the loan grade, our predictors also include debt to income ratio.
 We fit a logistic model to show the quantitative relationship between whether default or not and loan grade. Besides the loan grade and debt to income ratio, we add loan purpose and state as the group level, which include the information of different purpose and state's random effect to our model outcome.
 
 **glm(default ~ gradenum + dti, family=binomial)**
+
+![2 4](https://user-images.githubusercontent.com/32685027/33975601-7dfe3e3c-e05d-11e7-931d-a2f3ccbf2cf3.png)
+![2 5](https://user-images.githubusercontent.com/32685027/33975602-7e0b4032-e05d-11e7-9bc6-0d90c1c89309.png)
+
 
 From the binned residual plot, we could see a disturbing pattern, with an extreme positive and negative residual in the middle bin: people in the middle bin are more or less likely to default than is predicted by the model.
 
@@ -141,13 +162,18 @@ Since state and purpose may also have influence on the default rate, we fit mult
 
 **glmer(default ~ gradenum + dti + (1|purpose) + (1|addr_state), family=binomial(link="logit"))**
 
+![2 6](https://user-images.githubusercontent.com/32685027/33975604-7e19328c-e05d-11e7-9690-3f82d93eee13.png)
+![2 7](https://user-images.githubusercontent.com/32685027/33975623-9ceb4c86-e05d-11e7-96a2-65364eb2f19f.png)
+
 From the predictive result, we could see that although it is better than the former model, there is obvious difference between the original data and the prediction. 
 
 We could not find other factors, maybe we need to consider about Bayesian...?
 
 ### 3. After loan ended (Data: 2015-2017)
 
-Based on the model we fit, we predict the default rate for the loan between 2015-2017. 
+Based on the model we fit, we predict the default rate for the loan between 2015-2017.
+
+![3 1](https://user-images.githubusercontent.com/32685027/33975624-9cf93f12-e05d-11e7-93c0-012b85347e4f.png)
 
 ### 4. Discussion
 

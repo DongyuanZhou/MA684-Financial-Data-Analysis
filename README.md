@@ -10,7 +10,7 @@ Secondly, summarize the default rate and improve the former step to avoid defaul
 
 ## Goals
 
-In this analysis, we analyze data from Lending club (LC):
+In this analysis, we analyze data from Lending club (LC): ![lc-logo-official-min](https://user-images.githubusercontent.com/32685027/33977385-a159355c-e068-11e7-975d-9037ba1ef038.png)
 
 **Stage1: Before loan was funded (Data: 2015-2017)**
 
@@ -218,3 +218,6 @@ Code for Data Cleaning: [data clean.R](https://github.com/DongyuanZhou/MA684-Pro
 Code for EDA and Model: [MA684 Project.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/MA684%20Project.R)
 
 Code for Shiny App：[Loangrade_shiny.R](https://github.com/DongyuanZhou/MA684-Project/blob/master/Loangrade_shiny.R)
+
+Lending Club Logo: [_https://blog.lendingclub.com/wp-content/uploads/2017/05/LC-Logo-Official-min.png_](https://blog.lendingclub.com/wp-content/uploads/2017/05/LC-Logo-Official-min.png)
+
